@@ -6,7 +6,7 @@ import (
 )
 
 func Test_CreateDeviceCombinations(t *testing.T) {
-	iD := CreateInputs()
+	iD := CreateInputsForDeviceConfs()
 	for _,i := range iD{
 		exactCombs, nonExactCombs := CreateDeviceCombinations(i.Capacity,1,i.Background,i.Foreground)
 		fmt.Println("Exact: ",exactCombs)
@@ -21,7 +21,7 @@ type InputData struct {
 	Foreground map[int]int
 }
 
-func CreateInputs() []InputData{
+func CreateInputsForDeviceConfs() []InputData{
 	return []InputData{
 		InputData{
 			Capacity:   7,
