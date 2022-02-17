@@ -23,11 +23,11 @@ type InputData struct {
 
 func CreateInputs() []InputData{
 	return []InputData{
-		//InputData{
-		//	Capacity:   7,
-		//	Background: map[int]int{1:6, 2:2, 3:4},
-		//	Foreground: map[int]int{1:2},
-		//},
+		InputData{
+			Capacity:   7,
+			Background: map[int]int{1:6, 2:2, 3:4},
+			Foreground: map[int]int{1:2},
+		},
 		InputData{
 			Capacity:   10,
 			Background: map[int]int{1:5, 2:7, 3:10, 4:3},
