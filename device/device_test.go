@@ -8,7 +8,10 @@ import (
 func Test_CreateDeviceCombinations(t *testing.T) {
 	iD := CreateInputs()
 	for _,i := range iD{
-		fmt.Println(CreateDeviceCombinations(i.Capacity,i.Background,i.Foreground))
+		exactCombs, nonExactCombs := CreateDeviceCombinations(i.Capacity,1,i.Background,i.Foreground)
+		fmt.Println("Exact: ",exactCombs)
+		fmt.Println("Non Exact: ",nonExactCombs)
+		fmt.Println("--------------")
 	}
 }
 
