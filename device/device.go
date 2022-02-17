@@ -6,12 +6,16 @@ type Consumption struct {
 }
 
 type DeviceConf struct {
-	Capacity   int
 	Background Consumption
 	Foreground Consumption
 }
 
-func CreateDeviceCombinations(deviceCapacity, deltaDevCap int, background map[int]int, foreground map[int]int) ([]DeviceConf, []DeviceConf) {
+type Device struct {
+	Capacity   int
+	DeviceConf []DeviceConf
+}
+
+func CreateDeviceCombinations(deviceCapacity, deltaDevCap int, background map[int]int, foreground map[int]int) (*Device, *Device) {
 	exactCombs    := map[int]*[]DeviceConf{}
 	nonExactCombs := map[int]*[]DeviceConf{}
 	for bK, bV := range background {
@@ -24,13 +28,13 @@ func CreateDeviceCombinations(deviceCapacity, deltaDevCap int, background map[in
 		}
 	}
 
-	if len(exactCombs)>0 {return mapToSlice(exactCombs),nil}
-	return nil, mapToSlice(nonExactCombs)
+	if len(exactCombs)>0 {return &Device{deviceCapacity,mapToSlice(exactCombs)},nil}
+	return nil, &Device{deviceCapacity,mapToSlice(nonExactCombs)}
 }
 
 func appendToMap(combinations map[int]*[]DeviceConf, sum, bK, bV, fK, fV int) {
 	devSl, ok := combinations[sum]
-	newDC := DeviceConf{Capacity: sum, Background: Consumption{Id: bK, Consumption: bV}, Foreground: Consumption{Id: fK, Consumption: fV}}
+	newDC := DeviceConf{Background: Consumption{Id: bK, Consumption: bV}, Foreground: Consumption{Id: fK, Consumption: fV}}
 	if !ok {
 		devSl := &([]DeviceConf{newDC})
 		combinations[sum] = devSl
