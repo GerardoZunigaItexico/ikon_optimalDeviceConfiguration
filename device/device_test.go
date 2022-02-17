@@ -8,7 +8,10 @@ import (
 func Test_CreateDeviceCombinations(t *testing.T) {
 	iD := CreateInputs()
 	for _,i := range iD{
-		fmt.Println(CreateDeviceCombinations(i.Capacity,i.Background,i.Foreground))
+		exactCombs, nonExactCombs := CreateDeviceCombinations(i.Capacity,1,i.Background,i.Foreground)
+		fmt.Println("Exact: ",exactCombs)
+		fmt.Println("Non Exact: ",nonExactCombs)
+		fmt.Println("--------------")
 	}
 }
 
@@ -20,11 +23,11 @@ type InputData struct {
 
 func CreateInputs() []InputData{
 	return []InputData{
-		InputData{
-			Capacity:   7,
-			Background: map[int]int{1:6, 2:2, 3:4},
-			Foreground: map[int]int{1:2},
-		},
+		//InputData{
+		//	Capacity:   7,
+		//	Background: map[int]int{1:6, 2:2, 3:4},
+		//	Foreground: map[int]int{1:2},
+		//},
 		InputData{
 			Capacity:   10,
 			Background: map[int]int{1:5, 2:7, 3:10, 4:3},
