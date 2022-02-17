@@ -17,7 +17,7 @@ type Device struct {
 
 }
 
-func CreateDeviceCombinations(deviceCapacity, deltaDevCap int, background map[int]int, foreground map[int]int) (device Device) {
+func CreateDeviceCombinations(deviceCapacity, deltaDevCap int, background map[int]int, foreground map[int]int) (device Device, err error) {
 	exactCombs    := map[int]*[]DeviceConf{}
 	nonExactCombs := map[int]*[]DeviceConf{}
 	for bK, bV := range background {
@@ -31,9 +31,9 @@ func CreateDeviceCombinations(deviceCapacity, deltaDevCap int, background map[in
 	}
 
 	if len(exactCombs)>0 {
-		return Device{Capacity: deviceCapacity, DeviceConf: mapToSlice(exactCombs)}
+		return Device{Capacity: deviceCapacity, DeviceConf: mapToSlice(exactCombs)}, err
 	}
-	return Device{Capacity: deviceCapacity, NonExactDeviceConf: mapToSlice(nonExactCombs)}
+	return Device{Capacity: deviceCapacity, NonExactDeviceConf: mapToSlice(nonExactCombs)}, err
 }
 
 func appendToMap(combinations map[int]*[]DeviceConf, sum, bK, bV, fK, fV int) {

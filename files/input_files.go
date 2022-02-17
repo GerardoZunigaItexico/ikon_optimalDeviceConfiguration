@@ -101,12 +101,11 @@ func createConfigurationMap(line string) (m map[int]int){
 	return
 }
 
-func ParseChallengeIn(inputFile string) []InputData {
+func ParseChallengeIn(inputFile string) (id []InputData, err error) {
 	lines,err := readFile(inputFile)
 	if err != nil{
-		fmt.Println(err)
-		return nil
+		return id, err
 	}
 	configurations := parseInputLines(lines)
-	return regexForGetNumbers(configurations)
+	return regexForGetNumbers(configurations), nil
 }

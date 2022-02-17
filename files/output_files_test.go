@@ -2,6 +2,7 @@ package files
 
 import (
 	"fmt"
+	"github.com/stretchr/testify/assert"
 	"ikon_optimalDeviceConfiguration/device"
 	"log"
 	"os"
@@ -13,9 +14,11 @@ func Test_createOutputDeviceConf(t *testing.T){
 	if err != nil {
 		log.Println(err)
 	}
-	inputData := ParseChallengeIn(path+"/testFiles/challenge.in")
+	inputData,err := ParseChallengeIn(path+"/testFiles/challenge.in")
+	assert.NoError(t,err, "There is a problem with the parse on the file that you provided")
 	for _,i := range inputData{
-		device := device.CreateDeviceCombinations(i.Capacity,1,i.Background,i.Foreground)
+		device, err := device.CreateDeviceCombinations(i.Capacity,1,i.Background,i.Foreground)
+		assert.NoError(t,err, "There is a problem with the parse on the file that you provided")
 		fmt.Println(createOutputDeviceConf(device))
 	}
 }
@@ -25,10 +28,13 @@ func Test_createOutputStringForOutputFile(t *testing.T){
 	if err != nil {
 		log.Println(err)
 	}
-	inputData := ParseChallengeIn(path+"/testFiles/challenge.in")
+	inputData, err := ParseChallengeIn(path+"/testFiles/challenge.in")
+	assert.NoError(t,err, "There is a problem with the parse on the file that you provided")
 	var devices []device.Device
 	for _,i := range inputData{
-		devices = append(devices, device.CreateDeviceCombinations(i.Capacity,1,i.Background,i.Foreground))
+		device, err := device.CreateDeviceCombinations(i.Capacity,1,i.Background,i.Foreground)
+		assert.NoError(t,err, "There is a problem with the parse on the file that you provided")
+		devices = append(devices, device)
 	}
 	fmt.Println(createOutputStringForOutputFile(devices))
 }
@@ -38,10 +44,13 @@ func Test_CreateChallengeOut(t *testing.T){
 	if err != nil {
 		log.Println(err)
 	}
-	inputData := ParseChallengeIn(path+"/testFiles/challenge.in")
+	inputData, err := ParseChallengeIn(path+"/testFiles/challenge.in")
+	assert.NoError(t,err, "There is a problem with the parse on the file that you provided")
 	var devices []device.Device
 	for _,i := range inputData{
-		devices = append(devices, device.CreateDeviceCombinations(i.Capacity,1,i.Background,i.Foreground))
+		d, err := device.CreateDeviceCombinations(i.Capacity,1,i.Background,i.Foreground)
+		assert.NoError(t,err, "There is a problem with the Device Parse")
+		devices = append(devices, d)
 	}
 	fmt.Println(CreateChallengeOut(devices))
 }

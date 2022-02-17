@@ -48,3 +48,18 @@ func Test_regexForGetNumbers(t *testing.T){
 		fmt.Println( inputData.Capacity, "Background", inputData.Background, "Foreground", inputData.Foreground)
 	}
 }
+
+func Test_ParseChallengeIn(t *testing.T){
+	path, err := os.Getwd()
+	if err != nil {
+		log.Println(err)
+	}
+	inputData, err :=ParseChallengeIn(path+"/testFiles/challenge.in")
+	assert.NoError(t,err, "There is a problem with the parse on the file that you provided")
+	for _, inputData := range inputData{
+		assert.NotEqual(t,true,(inputData.Capacity<=0),"The Capacity can't be 0")
+		assert.NotEqual(t,0,len(inputData.Background),"The Background Info can not be empty")
+		assert.NotEqual(t,0,len(inputData.Foreground),"The Foreground Info can not be empty")
+		fmt.Println( inputData.Capacity, "Background", inputData.Background, "Foreground", inputData.Foreground)
+	}
+}
