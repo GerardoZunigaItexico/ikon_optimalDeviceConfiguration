@@ -2,17 +2,31 @@ package device
 
 import (
 	"fmt"
-	"testing"
 	"ikon_optimalDeviceConfiguration/files"
+	"testing"
 )
 
 func Test_CreateDeviceCombinations(t *testing.T) {
 	iD := CreateInputsForDeviceConfs()
 	for _,i := range iD{
-		exactCombs, nonExactCombs := CreateDeviceCombinations(i.Capacity,1,i.Background,i.Foreground)
-		fmt.Println("Exact: ",exactCombs)
-		fmt.Println("Non Exact: ",nonExactCombs)
-		fmt.Println("--------------")
+		device := CreateDeviceCombinations(i.Capacity,1,i.Background,i.Foreground)
+		printDevice(device)
+	}
+}
+
+func printDevice(device Device){
+	fmt.Println(device.Capacity)
+	if device.DeviceConf != nil{
+		printDeviceConf(device.DeviceConf)
+	} else {
+		printDeviceConf(device.NonExactDeviceConf)
+	}
+}
+
+func printDeviceConf(deviceConfigs *[]DeviceConf){
+	for _,dc := range *deviceConfigs{
+		fmt.Print("\tForeground:", dc.Foreground, " // ")
+		fmt.Println("Background:", dc.Background)
 	}
 }
 
