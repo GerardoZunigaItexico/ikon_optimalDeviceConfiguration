@@ -15,7 +15,7 @@ func NewGetOptimalConfiguration() cli.Command {
 		Flags: []cli.Flag{
 			cli.StringFlag{
 				Name:  "filePath",
-				Usage: "File Input Location that will be parsed",
+				Usage: "File Input Location that will be parsed.  This one is mandatory",
 				Required: true,
 			},
 			cli.StringFlag{
