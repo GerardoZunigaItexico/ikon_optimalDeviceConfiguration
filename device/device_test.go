@@ -2,14 +2,27 @@ package device
 
 import (
 	"fmt"
-	"ikon_optimalDeviceConfiguration/files"
+	"github.com/stretchr/testify/assert"
 	"testing"
 )
 
 func Test_CreateDeviceCombinations(t *testing.T) {
 	iD := CreateInputsForDeviceConfs()
+	deltaDeviceCapacity := 1
 	for _,i := range iD{
-		device := CreateDeviceCombinations(i.Capacity,1,i.Background,i.Foreground)
+		device := CreateDeviceCombinations(i.Capacity,deltaDeviceCapacity,i.Background,i.Foreground)
+		assert.Equal(t,i.Capacity,device.Capacity, "The capacity value from device should to be same thann the input")
+		if device.DeviceConf == nil{
+			assert.NotNil(t,device.NonExactDeviceConf,"There should to be possible combinations when at least there is 1 delta diference between the capacity and consumption")
+			for _,dc := range *device.NonExactDeviceConf{
+				assert.Equal(t,(i.Capacity-deltaDeviceCapacity),(dc.Foreground.Consumption+dc.Background.Consumption),fmt.Sprint("The sum betweenn foreground and background vs the capacity, the delta should be ",deltaDeviceCapacity))
+			}
+		} else{
+			assert.NotNil(t,device.DeviceConf,"There should to be possible combinations when at least there is  delta diference between the capacity and consumption")
+			for _,dc := range *device.DeviceConf{
+				assert.Equal(t,i.Capacity,(dc.Foreground.Consumption+dc.Background.Consumption),fmt.Sprint("The sum betweenn foreground and background vs the capacity, the delta should be ",deltaDeviceCapacity))
+			}
+		}
 		printDevice(device)
 	}
 }
@@ -30,24 +43,30 @@ func printDeviceConf(deviceConfigs *[]DeviceConf){
 	}
 }
 
-func CreateInputsForDeviceConfs() []files.InputData{
-	return []files.InputData{
-		files.InputData{
+type InputData struct {
+	Capacity int
+	Background map[int]int
+	Foreground map[int]int
+}
+
+func CreateInputsForDeviceConfs() []InputData{
+	return []InputData{
+		InputData{
 			Capacity:   7,
 			Background: map[int]int{1:6, 2:2, 3:4},
 			Foreground: map[int]int{1:2},
 		},
-		files.InputData{
+		InputData{
 			Capacity:   10,
 			Background: map[int]int{1:5, 2:7, 3:10, 4:3},
 			Foreground: map[int]int{1:5, 2:4, 3:3, 4:2},
 		},
-		files.InputData{
+		InputData{
 			Capacity:   20,
 			Background: map[int]int{1:9, 2:15, 3:8},
 			Foreground: map[int]int{1:11, 2:8, 3:12},
 		},
-		files.InputData{
+		InputData{
 			Capacity:   20,
 			Background: map[int]int{1:7, 2:14, 3:8},
 			Foreground: map[int]int{1:14, 2:5, 3:10},
