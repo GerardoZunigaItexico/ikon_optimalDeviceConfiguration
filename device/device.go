@@ -11,11 +11,13 @@ type DeviceConf struct {
 }
 
 type Device struct {
-	Capacity   int
-	DeviceConf []DeviceConf
+	Capacity           int
+	DeviceConf 		   *[]DeviceConf
+	NonExactDeviceConf *[]DeviceConf
+
 }
 
-func CreateDeviceCombinations(deviceCapacity, deltaDevCap int, background map[int]int, foreground map[int]int) (*Device, *Device) {
+func CreateDeviceCombinations(deviceCapacity, deltaDevCap int, background map[int]int, foreground map[int]int) (device Device) {
 	exactCombs    := map[int]*[]DeviceConf{}
 	nonExactCombs := map[int]*[]DeviceConf{}
 	for bK, bV := range background {
@@ -28,8 +30,10 @@ func CreateDeviceCombinations(deviceCapacity, deltaDevCap int, background map[in
 		}
 	}
 
-	if len(exactCombs)>0 {return &Device{deviceCapacity,mapToSlice(exactCombs)},nil}
-	return nil, &Device{deviceCapacity,mapToSlice(nonExactCombs)}
+	if len(exactCombs)>0 {
+		return Device{Capacity: deviceCapacity, DeviceConf: mapToSlice(exactCombs)}
+	}
+	return Device{Capacity: deviceCapacity, NonExactDeviceConf: mapToSlice(nonExactCombs)}
 }
 
 func appendToMap(combinations map[int]*[]DeviceConf, sum, bK, bV, fK, fV int) {
@@ -43,11 +47,12 @@ func appendToMap(combinations map[int]*[]DeviceConf, sum, bK, bV, fK, fV int) {
 	}
 }
 
-func mapToSlice(combinations map[int]*[]DeviceConf)(deviceConfigs []DeviceConf){
+func mapToSlice(combinations map[int]*[]DeviceConf) *[]DeviceConf{
+	deviceConfigs := []DeviceConf{}
 	for _, slice := range combinations {
 		for _,vv := range *slice {
 			deviceConfigs = append(deviceConfigs, vv)
 		}
 	}
-	return 
+	return &deviceConfigs
 }
