@@ -4,34 +4,36 @@ import (
 	"errors"
 	"fmt"
 	"ikon_optimalDeviceConfiguration/device"
-	"log"
 	"os"
 
 	"strings"
 )
 
-func CreateChallengeOut(devices []device.Device) (fileLocation string){
+func CreateChallengeOut(devices []device.Device) (fileLocation string, err error){
 	path, err := os.Getwd()
 	if err != nil {
-		log.Println(err)
+		return fileLocation, err
 	}
 	fileLocation = path+"/challenge.out"
-	deleteIfExists(fileLocation)
+	err = deleteIfExists(fileLocation)
+	if err != nil {
+		return fileLocation, err
+	}
 
 	f, err := os.Create(fileLocation)
 
 	if err != nil {
-		log.Fatal(err)
+		return fileLocation, err
 	}
 	defer f.Close()
 
 	_, err2 := f.WriteString(createOutputStringForOutputFile(devices))
 
 	if err2 != nil {
-		log.Fatal(err2)
+		return fileLocation, err
 	}
 
-	return fileLocation
+	return fileLocation, nil
 }
 
 func createOutputStringForOutputFile(devices []device.Device) (lines string){
@@ -61,12 +63,13 @@ func createOutputDeviceConf(device device.Device) (idsLine string){
 	return
 }
 
-func deleteIfExists(fileLocation string)  {
+func deleteIfExists(fileLocation string) error {
 	_, err := os.Stat(fileLocation)
 	if !errors.Is(err, os.ErrNotExist){
 		err := os.Remove(fileLocation)  // remove a single file
 		if err != nil {
-			fmt.Println(err)
+			return err
 		}
 	}
+	return nil
 }
